@@ -1,23 +1,46 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-import numpy as np
 import random
 
 
-class Edges:
-    def __init__(self, start_node, end_node):
-        self.snode = start_node
-        self.enode = end_node
+def random_graph_gen(max_num_nodes=5, max_num_edges=10, seed=None):
+    """
+    random graph generator produces a networkx.graph object
+
+    :param max_num_nodes: int, max number of nodes in the graph
+    :param max_num_edges: int, max number of edges in the graph
+    :param seed: int, random seed
+    :return: networkx.graph object, the randomly generated graphs
+    """
+    num_nodes = random.randint(2, max_num_nodes + 1)
+    num_edges = random.randint(1, max_num_edges + 1)
+    g = nx.gnm_random_graph(num_nodes, num_edges, seed=seed)         # generate a random graph (no weighted edges)
+
+    edge_lst = g.edges()
+    edge_attr = {}
+    for index, edge in enumerate(edge_lst):
+        weight = random.uniform(-10.0, 10.0)      # randomly generate weights between -10, 10
+        edge_attr[edge] = {'weight': weight}      # add the weights and other attributes
+
+    nx.set_edge_attributes(g, edge_attr)
+    return g
+
+
+def brute_force_soln(graph):
+    
+    return set_a
 
 
 def main():
-    lst_of_edges = [Edges(0, 1), Edges(1, 2), Edges(2, 0), Edges(2, 3)]
-    G = nx.Graph()
+    g = random_graph_gen()
 
-    for edge in lst_of_edges:
-        G.add_edge(str(edge.snode), str(edge.enode))
-
-    nx.draw(G)
+    # lst_of_edges = [(0, 1, {"weight": 1.5}), (1, 2, {"weight": 2}), (2, 0, {"weight": -1}), (2, 3, {"weight": -0.5})]
+    # g = nx.Graph()
+    # g.add_edges_from(lst_of_edges)
+    # edges = g.edges()
+    # labels = nx.get_edge_attributes(g, 'weight')
+    # nx.draw_networkx_edge_labels(g, nx.random_layout(g), labels=labels)
+    nx.draw(g, with_labels=True)
     plt.show()
     return
 
