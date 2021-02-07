@@ -35,10 +35,11 @@ def zero_pad(bit_string, max_len):
     return final_bit_string
 
 
-def brute_force_soln(graph, debug=False):
+def brute_force_soln(graph, weighted=True, debug=False):
     """
     Compute the maximum cut for a weighted graph using a brute force search
     :param graph: nx.graph object, the graph we want to cut
+    :param weighted: bool, if true determine cut based on weights, else assume weights = 1
     :param debug: bool, if true adds print statements (default = False)
     :return: tuple (float, list), the magnitude of the cut, and one group of nodes, (the rest are in other group)
     """
@@ -69,7 +70,10 @@ def brute_force_soln(graph, debug=False):
             if digit == '1':
                 group_of_nodes.append(index)
 
-        cut_size = nx.cut_size(graph, group_of_nodes, weight='weight')
+        if weighted:
+            cut_size = nx.cut_size(graph, group_of_nodes, weight='weight')
+        else:
+            cut_size = nx.cut_size(graph, group_of_nodes)
 
         if (num == 0) or (cut_size > optimal_cut_size):
             optimal_cut_size = cut_size
@@ -95,6 +99,8 @@ def main():
     cut, group = brute_force_soln(g, debug=True)
     print('************\n Optimal cut = {}'.format(cut))
     print('Optimal group = ', group)
+
+    # print(len(g.nodes))
     return
 
 
